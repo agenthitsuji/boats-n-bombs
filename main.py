@@ -1,4 +1,4 @@
-import pygame
+import pygame, sys
 import sq
 
 
@@ -8,6 +8,10 @@ def main():
 
     # Initialize PyGame
     pygame.init()
+
+    # Clock
+    clock = pygame.time.Clock()
+    dt = 0
 
     # Screen
     screen = pygame.display.set_mode((800, 600))
@@ -21,13 +25,20 @@ def main():
     running = True
     while running:
         for event in pygame.event.get():
-            if event.type == pygame.quit:
+            if event.type == pygame.QUIT:
                 running = False
+                sys.exit()
 
-    # Draw square
-    screen.blit(square.surf, (200, 200))
+        # Draw square
+        screen.blit(square.surf, (200, 200))
 
-    pygame.display.flip()
+
+        # Display Flip
+        pygame.display.flip()
+
+        # Clock 
+        dt = clock.tick(60) / 1000
+        print(dt)
 
 
 if __name__ == "__main__":
