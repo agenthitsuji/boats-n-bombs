@@ -21,6 +21,8 @@ class Boat():
             )
         # Stats
         self.speed = constants.BOAT_SPEED * 2
+        # Supply
+        self.supply = constants.BASE_SUPPLY
 
 
     def draw(self, screen):
@@ -28,20 +30,37 @@ class Boat():
         return draw.rect(screen, constants.HITBOX_COLOR, self.hitbox, 1), screen.blit(self.sprite, (self.pos_x, self.pos_y))
 
     def move(self):
-        if key.get_pressed()[pygame.K_RIGHT]:
-            self.pos_x += self.speed
-            print(f"boat is at: {self.pos_x} {self.pos_y}") 
-        elif key.get_pressed()[pygame.K_LEFT]:
-            self.pos_x -= self.speed
-            print(f"boat is at: {self.pos_x} {self.pos_y}")
-        elif key.get_pressed()[pygame.K_UP]:
-            self.pos_y -= self.speed
-            print(f"boat is at: {self.pos_x} {self.pos_y}") 
-        elif key.get_pressed()[pygame.K_DOWN]:
-            self.pos_y += self.speed        
-            print(f"boat is at: {self.pos_x} {self.pos_y}")
+        if self.supply - self.speed > 0:
+            if key.get_pressed()[pygame.K_RIGHT]:
+                self.pos_x += self.speed
+                self.update_supply()
+                print(f"boat is at: {self.pos_x} {self.pos_y}") 
+            elif key.get_pressed()[pygame.K_LEFT]:
+                self.pos_x -= self.speed
+                self.update_supply()
+                print(f"boat is at: {self.pos_x} {self.pos_y}")
+            elif key.get_pressed()[pygame.K_UP]:
+                self.pos_y -= self.speed
+                self.update_supply()
+                print(f"boat is at: {self.pos_x} {self.pos_y}") 
+            elif key.get_pressed()[pygame.K_DOWN]:
+                self.pos_y += self.speed        
+                self.update_supply()
+                print(f"boat is at: {self.pos_x} {self.pos_y}")
+            self.update_hitbox()
+        else:
+            print("Can't move no supplies!")
+        
+        
 
     def update(self):
+        self.move()
+
+
+
+    def update_hitbox(self):
         self.hitbox.left = self.pos_x
         self.hitbox.top = self.pos_y
-        self.move()
+
+    def update_supply(self):
+        self.supply -= self.speed

@@ -1,6 +1,9 @@
-import pygame, sys
+import pygame, sys, constants
 
-import player, constants, boat
+from town import Town
+from player import Player
+from boat import Boat
+
 
 
 
@@ -19,9 +22,12 @@ def main():
     pygame.display.set_caption('Boats and Bombs!')
 
     # Objects
-    player_boat = boat.Boat('Player Boat', "/home/yoichann/boats-and-bombs/boat.png", (0, 0))
-    p1 = player.Player('Bingus', player_boat)
+    player_boat = Boat('Player Boat', "/home/yoichann/boats-and-bombs/boat.png", (0, 0))
+    p1 = Player('Bingus', player_boat)
+    town = Town('Walterville', 3, 350, 220)
 
+    # Drawing Table
+    drawable = [player_boat, town]
 
     # Fonts
     mapfont = pygame.font.SysFont('Serif', 32)
@@ -30,14 +36,13 @@ def main():
     # Game Loop
     
     running = True
+
     while running:
 
         screen.fill((0, 102, 204))
 
-        p1.boat.draw(screen)
-
-        town = pygame.draw.rect(screen, (204, 102, 0), [530, 370, 50, 50], 0)
-
+        for item in drawable:
+            item.draw(screen)
 
         screen.blit(textsurface, (333, 444))
 
@@ -54,9 +59,9 @@ def main():
 
 
         # Collision Test
-        if p1.boat.hitbox.colliderect(town):
+        if p1.boat.hitbox.colliderect(town.hitbox):
             print('boat has entered town!')
-            town = pygame.draw.rect(screen, (204, 204, 0), [530, 370, 50, 50], 0)
+            p1.boat.supply += town.supply_bonus
             ui = pygame.draw.rect(screen, (35, 35, 35), [0, 0, screen.get_width(), 200], 0) 
 
 
@@ -65,7 +70,7 @@ def main():
 
 
         # Draw Sq
-        textsurface = pygame.font.Font.render(mapfont, str(f"X: {p1.boat.pos_x}, Y: {p1.boat.pos_y}"), True, (128, 128, 128))
+        textsurface = pygame.font.Font.render(mapfont, str(f"X: {p1.boat.pos_x}, Y: {p1.boat.pos_y}\nSupplies: {p1.boat.supply}"), True, (128, 128, 128))
 
 
 
