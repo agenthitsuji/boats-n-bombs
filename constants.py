@@ -1,6 +1,9 @@
+import pygame
 FRAMERATE = 60
 
 SCREEN_W = 800
 SCREEN_H = 600
 
 BOAT_SPEED = 3
+
+HITBOX_COLOR = (128, 128, 128)
